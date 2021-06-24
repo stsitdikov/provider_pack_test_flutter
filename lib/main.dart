@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,47 +8,70 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String data = 'This is my 4th name';
-
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(data),
+    return ChangeNotifierProvider<Data>(
+      create: (_) => Data(),
+      child: MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: MyText(),
+          ),
+          body: Level1(),
         ),
-        body: Level1(data),
       ),
     );
   }
 }
 
 class Level1 extends StatelessWidget {
-  final String data;
-
-  Level1(this.data);
-
   @override
   Widget build(BuildContext context) {
-    return Level2(data);
+    return Level2();
   }
 }
 
 class Level2 extends StatelessWidget {
-  final String data;
-  Level2(this.data);
-
   @override
   Widget build(BuildContext context) {
-    return Level3(data);
+    return Column(
+      children: [
+        MyTextField(),
+        Level3(),
+      ],
+    );
   }
 }
 
 class Level3 extends StatelessWidget {
-  final String data;
-  Level3(this.data);
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(data),
+      child: Text(Provider.of<Data>(context).data),
     );
+  }
+}
+
+class MyText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(Provider.of<Data>(context).data);
+  }
+}
+
+class MyTextField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: (newText) {
+        Provider.of<Data>(context).updateData(newText);
+      },
+    );
+  }
+}
+
+class Data extends ChangeNotifier {
+  String data = 'Some data';
+  void updateData(newText) {
+    data = newText;
+    notifyListeners();
   }
 }
