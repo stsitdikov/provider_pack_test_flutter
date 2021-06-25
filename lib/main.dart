@@ -53,7 +53,7 @@ class Level3 extends StatelessWidget {
 class MyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(Provider.of<Data>(context).data);
+    return Text(Provider.of<Data>(context, listen: false).data);
   }
 }
 
@@ -62,7 +62,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: (newText) {
-        Provider.of<Data>(context).updateData(newText);
+        Provider.of<Data>(context, listen: false).updateData(newText);
       },
     );
   }
@@ -70,8 +70,8 @@ class MyTextField extends StatelessWidget {
 
 class Data extends ChangeNotifier {
   String data = 'Some data';
-  void updateData(newText) {
-    data = newText;
+  void updateData(newData) {
+    data = newData;
     notifyListeners();
   }
 }
